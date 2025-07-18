@@ -3,24 +3,38 @@ import { nanoid } from "nanoid";
 
 const ExpenseContext = createContext();
 
+const expenseInLocalStorage = () => {
+    let expenses = localStorage.getItem('expenses');
+    if(expenses) {
+        expenses = JSON.parse(localStorage.getItem('expenses'));
+    }
+    else {
+        expenses = [];
+    }
+    return expenses;
+}
+
 export const ExpenseProvider = ({children}) => {
-    const [expenses, setExpenses] = useState([]);
+    const [expenses, setExpenses] = useState(expenseInLocalStorage);
     const [editingExpense, setEditingExpense] = useState(null);
 
     function addExpense(newExpenseData) {
         const newExpense = { id:nanoid(), ...newExpenseData};
         const updatedExpenses = [...expenses, newExpense];
         setExpenses(updatedExpenses);
+        localStorage.setItem('expenses', JSON.stringify(updateExpense));
     }
 
     function deleteExpense(id) {
         const remainingExpenses = expenses.filter((expense) => id !== expense.id);
         setExpenses(remainingExpenses);
+        localStorage.setItem('expenses', JSON.stringify(remainingExpenses));
     }
 
     function updateExpense(updatedExpense) {
         const editedExpenses = expenses.map((expense) => expense.id === updatedExpense.id ? updatedExpense : expense);
         setExpenses(editedExpenses);
+        localStorage.setItem('expenses', JSON.stringify(editedExpenses));
         setEditingExpense(null);
     }
 

@@ -65,5 +65,9 @@ export const ExpenseProvider = ({children}) => {
 }
 
 export const useExpenseContext = () => {
-    return useContext(ExpenseContext);
+    const context = useContext(ExpenseContext);
+    if(!context) {
+        throw new Error('The context must be used within a provider')
+    }
+    return context ;
 }
